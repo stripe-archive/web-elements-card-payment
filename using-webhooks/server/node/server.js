@@ -43,7 +43,7 @@ app.post("/create-payment-intent", async (req, res) => {
 
   // Send public key and PaymentIntent details to client
   res.send({
-    publicKey: env.parsed.STRIPE_PUBLIC_KEY,
+    publicKey: process.env.STRIPE_PUBLIC_KEY,
     clientSecret: paymentIntent.client_secret
   });
 });
@@ -55,7 +55,7 @@ app.post("/webhook", async (req, res) => {
   // Check if webhook signing is configured.
   let data, eventType;
 
-  if (env.parsed.STRIPE_WEBHOOK_SECRET) {
+  if (process.env.STRIPE_WEBHOOK_SECRET) {
     // Retrieve the event by verifying the signature using the raw body and secret.
     let event, data, eventType;
     let signature = req.headers["stripe-signature"];
@@ -63,7 +63,7 @@ app.post("/webhook", async (req, res) => {
       event = stripe.webhooks.constructEvent(
         req.rawBody,
         signature,
-        env.parsed.STRIPE_WEBHOOK_SECRET
+        process.env.STRIPE_WEBHOOK_SECRET
       );
     } catch (err) {
       console.log(`⚠️  Webhook signature verification failed.`);
