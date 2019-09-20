@@ -42,13 +42,12 @@ def create_payment():
     # Create a PaymentIntent with the order amount and currency
     intent = stripe.PaymentIntent.create(
         amount=calculate_order_amount(data['items']),
-        currency=data['currency'],
-        capture_method="manual"
+        currency=data['currency']
     )
 
     try:
         # Send public key and PaymentIntent details to client
-        return jsonify({'publicKey': os.getenv('STRIPE_PUBLIC_KEY'), 'clientSecret': intent.client_secret, 'id': intent.id})
+        return jsonify({'publicKey': os.getenv('STRIPE_PUBLIC_KEY'), 'clientSecret': intent.client_secret})
     except Exception as e:
         return jsonify(str(e)), 403
 
@@ -76,17 +75,10 @@ def webhook_received():
         event_type = request_data['type']
     data_object = data['object']
 
-    if event_type == 'payment_intent.amount_capturable_updated':
-        print(
-            '❗ Charging the card for: ' + str(data_object['amount_capturable']))
-        # You can capture an amount less than or equal to the amount_capturable
-        # By default capture() will capture the full amount_capturable
-        # To cancel a payment before capturing use .cancel() (https://stripe.com/docs/api/payment_intents/cancel)
-        intent = stripe.PaymentIntent.capture(data_object['id'])
-    elif event_type == 'payment_intent.succeeded':
+    if event_type == 'payment_intent.succeeded':
         print('💰 Payment received!')
         # Fulfill any orders, e-mail receipts, etc
-        # To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)
+        # To cancel the payment you will need to issue a Refund (https://stripe.com/docs/api/refunds)
     elif event_type == 'payment_intent.payment_failed':
         print('❌ Payment failed.')
     return jsonify({'status': 'success'})

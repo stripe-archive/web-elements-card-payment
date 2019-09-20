@@ -76,16 +76,10 @@ post '/webhook' do
   data = event['data']
   data_object = data['object']
 
-  if event_type == 'payment_intent.amount_capturable_updated'
-    puts '❗ Charging the card for: ' + data_object['amount_capturable'].to_s
-    # You can capture an amount less than or equal to the amount_capturable
-    # By default capture() will capture the full amount_capturable
-    # To cancel a payment before capturing use .cancel() (https://stripe.com/docs/api/payment_intents/cancel)
-    intent = Stripe::PaymentIntent.capture(data_object['id'])
-  elsif event_type == 'payment_intent.succeeded'
+  if event_type == 'payment_intent.succeeded'
     puts '💰 Payment received!'
     # Fulfill any orders, e-mail receipts, etc
-    # To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)
+    # To cancel the payment you will need to issue a Refund (https://stripe.com/docs/api/refunds)
   elsif event_type == 'payment_intent.payment_failed'
     puts '❌ Payment failed.'
   end

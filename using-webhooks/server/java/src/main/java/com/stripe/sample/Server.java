@@ -75,12 +75,11 @@ public class Server {
             CreatePaymentBody postBody = gson.fromJson(request.body(), CreatePaymentBody.class);
             PaymentIntentCreateParams createParams = new PaymentIntentCreateParams.Builder()
                     .setCurrency(postBody.getCurrency()).setAmount(new Long(calculateOrderAmount(postBody.getItems())))
-                    .setCaptureMethod(PaymentIntentCreateParams.CaptureMethod.MANUAL).build();
+                    .build();
             // Create a PaymentIntent with the order amount and currency
             PaymentIntent intent = PaymentIntent.create(createParams);
             // Send public key and PaymentIntent details to client
-            return gson.toJson(new CreatePaymentResponse(dotenv.get("STRIPE_PUBLIC_KEY"), intent.getClientSecret(),
-                    intent.getId()));
+            return gson.toJson(new CreatePaymentResponse(dotenv.get("STRIPE_PUBLIC_KEY"), intent.getClientSecret()));
         });
 
         post("/webhook", (request, response) -> {
@@ -99,19 +98,9 @@ public class Server {
             }
 
             switch (event.getType()) {
-            case "payment_intent.amount_capturable_updated":
-                EventDataObjectDeserializer deserializer = event.getDataObjectDeserializer();
-                PaymentIntent intent = ApiResource.GSON.fromJson(deserializer.getRawJson(), PaymentIntent.class);
-                System.out.println("❗Charging the card for:  " + Long.toString(intent.getAmountCapturable()));
-                // You can capture an amount less than or equal to the amount_capturable
-                // By default capture() will capture the full amount_capturable
-                // To cancel a payment before capturing use .cancel()
-                // (https://stripe.com/docs/api/payment_intents/cancel)
-                intent.capture();
-                break;
             case "payment_intent.succeeded":
                 // Fulfill any orders, e-mail receipts, etc
-                // To cancel the payment after capture you will need to issue a Refund
+                // To cancel the payment you will need to issue a Refund
                 // (https://stripe.com/docs/api/refunds)
                 System.out.println("💰Payment received!");
                 break;

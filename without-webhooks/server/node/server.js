@@ -51,20 +51,11 @@ app.post("/pay", async (req, res) => {
         currency: currency,
         payment_method: paymentMethodId,
         confirmation_method: "manual",
-        capture_method: "manual",
         confirm: true
       });
     } else {
       // Confirm the PaymentIntent to place a hold on the card
       intent = await stripe.paymentIntents.confirm(paymentIntentId);
-    }
-
-    if (intent.status === "requires_capture") {
-      console.log("❗ Charging the card for: " + intent.amount_capturable);
-      // Because capture_method was set to manual we need to manually capture in order to move the funds
-      // You have 7 days to capture a confirmed PaymentIntent
-      // To cancel a payment before capturing use .cancel() (https://stripe.com/docs/api/payment_intents/cancel)
-      intent = await stripe.paymentIntents.capture(intent.id);
     }
 
     const response = generateResponse(intent);

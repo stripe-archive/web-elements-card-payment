@@ -38,24 +38,26 @@ app.post("/create-payment-intent", async (req, res) => {
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
     amount: calculateOrderAmount(items),
-    currency: currency,
-    capture_method: "manual"
+    currency: currency
   });
 
   // Send public key and PaymentIntent details to client
   res.send({
     publicKey: env.parsed.STRIPE_PUBLIC_KEY,
-    clientSecret: paymentIntent.client_secret,
-    id: paymentIntent.id
+    clientSecret: paymentIntent.client_secret
   });
 });
 
-// Webhook handler for asynchronous events.
+// Expose a endpoint as a webhook handler for asynchronous events.
+// Configure your webhook in the stripe developer dashboard
+// https://dashboard.stripe.com/test/webhooks
 app.post("/webhook", async (req, res) => {
   // Check if webhook signing is configured.
+  let data, eventType;
+
   if (env.parsed.STRIPE_WEBHOOK_SECRET) {
     // Retrieve the event by verifying the signature using the raw body and secret.
-    let event;
+    let event, data, eventType;
     let signature = req.headers["stripe-signature"];
     try {
       event = stripe.webhooks.constructEvent(
@@ -76,13 +78,7 @@ app.post("/webhook", async (req, res) => {
     eventType = req.body.type;
   }
 
-  if (eventType === "payment_intent.amount_capturable_updated") {
-    console.log(`❗ Charging the card for: ${data.object.amount_capturable}`);
-    // You can capture an amount less than or equal to the amount_capturable
-    // By default capture() will capture the full amount_capturable
-    // To cancel a payment before capturing use .cancel() (https://stripe.com/docs/api/payment_intents/cancel)
-    const intent = await stripe.paymentIntents.capture(data.object.id);
-  } else if (eventType === "payment_intent.succeeded") {
+  if (eventType === "payment_intent.succeeded") {
     // Funds have been captured
     // Fulfill any orders, e-mail receipts, etc
     // To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)

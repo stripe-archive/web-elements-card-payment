@@ -54,18 +54,11 @@ def pay():
                 currency=data['currency'],
                 payment_method=data['paymentMethodId'],
                 confirmation_method='manual',
-                capture_method='manual',
                 confirm=True
             )
         else:
             # Confirm the PaymentIntent to collect the money
             intent = stripe.PaymentIntent.confirm(data['paymentIntentId'])
-        if intent['status'] == 'requires_capture':
-            print('❗ Charging the card for: ' + str(intent['amount_capturable']))
-            # Because capture_method was set to manual we need to manually capture in order to move the funds
-            # You have 7 days to capture a confirmed PaymentIntent
-            # To cancel a payment before capturing use .cancel() (https://stripe.com/docs/api/payment_intents/cancel)
-            intent = stripe.PaymentIntent.capture(intent.id)
 
         return generate_response(intent)
     except Exception as e:
@@ -82,7 +75,7 @@ def generate_response(intent):
         return jsonify({'error': 'Your card was denied, please provide a new payment method'})
     elif status == 'succeeded':
         # Payment is complete, authentication not required
-        # To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)
+        # To cancel the payment you will need to issue a Refund (https://stripe.com/docs/api/refunds)
         print("💰 Payment received!")
         return jsonify({'clientSecret': intent['client_secret']})
 

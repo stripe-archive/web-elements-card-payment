@@ -89,21 +89,12 @@ $app->post('/pay', function(Request $request, Response $response) use ($app)  {
       "currency" => $body->currency,
       "payment_method" => $body->paymentMethodId,
       "confirmation_method" => "manual",
-      "capture_method" => "manual",
       "confirm" => true
     ]);
   } else {
     // Confirm the PaymentIntent to collect the money
     $intent = \Stripe\PaymentIntent::retrieve($body->paymentIntentId);
     $intent->confirm();
-  }
-
-  if($intent->status == 'requires_capture') {
-    $logger->info("❗ Charging the card for: " . $intent->amount_capturable);
-    // Because capture_method was set to manual we need to manually capture in order to move the funds
-    // You have 7 days to capture a confirmed PaymentIntent
-    // To cancel a payment before capturing use .cancel() (https://stripe.com/docs/api/payment_intents/cancel)
-    $intent->capture();
   }
 
   $responseBody = generateResponse($intent, $logger);

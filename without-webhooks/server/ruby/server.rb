@@ -44,20 +44,11 @@ post '/pay' do
         currency: data['currency'],
         payment_method: data['paymentMethodId'],
         confirmation_method: 'manual',
-        capture_method: 'manual',
         confirm: true
       )
     else
       # Confirm the PaymentIntent to collect the money
       intent = Stripe::PaymentIntent.confirm(data['paymentIntentId'])
-    end
-
-    if intent['status'] == 'requires_capture'
-      puts '❗ Charging the card for: ' + intent['amount_capturable'].to_s
-      # Because capture_method was set to manual we need to manually capture in order to move the funds
-      # You have 7 days to capture a confirmed PaymentIntent
-      # To cancel a payment before capturing use .cancel() (https://stripe.com/docs/api/payment_intents/cancel)
-      intent = Stripe::PaymentIntent.capture(intent['id'])
     end
 
     generate_response(intent)
@@ -86,7 +77,7 @@ def generate_response(intent)
     }.to_json
   when 'succeeded'
     # Payment is complete, authentication not required
-    # To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)
+    # To cancel the payment you will need to issue a Refund (https://stripe.com/docs/api/refunds)
     puts '💰 Payment received!'
     {
       clientSecret: intent['client_secret']

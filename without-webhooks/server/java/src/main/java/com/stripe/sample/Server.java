@@ -106,7 +106,7 @@ public class Server {
         case "succeeded":
             System.out.println("💰 Payment received!");
             // Payment is complete, authentication not required
-            // To cancel the payment after capture you will need to issue a Refund
+            // To cancel the payment you will need to issue a Refund
             // (https://stripe.com/docs/api/refunds)
             response.setClientSecret(intent.getClientSecret());
             break;
@@ -145,7 +145,7 @@ public class Server {
                             .setCurrency(postBody.getCurrency()).setAmount(new Long(orderAmount))
                             .setPaymentMethod(postBody.getPaymentMethodId())
                             .setConfirmationMethod(PaymentIntentCreateParams.ConfirmationMethod.MANUAL)
-                            .setCaptureMethod(PaymentIntentCreateParams.CaptureMethod.MANUAL).setConfirm(true).build();
+                            .setConfirm(true).build();
                     // Create a PaymentIntent with the order amount and currency
                     intent = PaymentIntent.create(createParams);
                 } else {
@@ -154,15 +154,6 @@ public class Server {
                     intent = intent.confirm();
                 }
 
-                if (intent.getStatus().equals("requires_capture")) {
-                    System.out.println("❗ Charging the card for: " + Long.toString(intent.getAmountCapturable()));
-                    // Because capture_method was set to manual we need to manually capture in order
-                    // to move the funds
-                    // You have 7 days to capture a confirmed PaymentIntent
-                    // To cancel a payment before capturing use .cancel()
-                    // (https://stripe.com/docs/api/payment_intents/cancel)
-                    intent = intent.capture();
-                }
                 responseBody = generateResponse(intent, responseBody);
             } catch (Exception e) {
                 // Handle "hard declines" e.g. insufficient funds, expired card, etc
