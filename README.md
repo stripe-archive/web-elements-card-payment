@@ -7,7 +7,7 @@ Charging a card consists of three steps:
 
 **💸 Capture -** Funds are transferred to the merchant's account and the payment is complete.
 
-The [Payment Intents API](https://stripe.com/docs/api/payment_intents) abstracts away these three stages by handling all steps of the process through the [confirm method](https://stripe.com/docs/api/payment_intents/confirm). After you create a PaymentIntent, call confirm to authenticate, authorize, and capture the funds all in one API call.
+The [Payment Intents API](https://stripe.com/docs/api/payment_intents) abstracts away these three stages by handling all steps of the process through the [confirm method](https://stripe.com/docs/api/payment_intents/confirm). After you create a PaymentIntent, call confirm to authenticate, authorize, and capture the funds in one API call.
 
 
 There are two implementations depending on whether you want to use webhooks for any post-payment process: 
