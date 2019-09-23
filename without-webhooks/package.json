@@ -1,5 +1,5 @@
 {
-  "name": "stripe-sample-placing-a-hold",
+  "name": "stripe-sample-web-card-payment",
   "version": "1.0.0",
   "description": "Placing a hold",
   "main": "server.js",

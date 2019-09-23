@@ -1,5 +1,5 @@
 {
-  "name": "stripe-placing-a-hold-auto-confirmation",
+  "name": "stripe-sample-web-card-payment",
   "version": "1.0.0",
   "description": "How to place a hold on a card",
   "main": "index.js",

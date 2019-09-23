@@ -6,6 +6,9 @@ var orderData = {
   currency: "usd"
 };
 
+// Disable the button until we have Stripe set up on the page
+document.querySelector("button").disabled = true;
+
 fetch("/create-payment-intent", {
   method: "POST",
   headers: {
@@ -20,6 +23,8 @@ fetch("/create-payment-intent", {
     return setupElements(data);
   })
   .then(function({ stripe, card, clientSecret }) {
+    document.querySelector("button").disabled = false;
+
     document.querySelector("#submit").addEventListener("click", function(evt) {
       evt.preventDefault();
       // Initiate payment when the submit button is clicked

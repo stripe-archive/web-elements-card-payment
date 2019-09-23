@@ -52,9 +52,9 @@ app.post("/create-payment-intent", async (req, res) => {
 // Configure your webhook in the stripe developer dashboard
 // https://dashboard.stripe.com/test/webhooks
 app.post("/webhook", async (req, res) => {
-  // Check if webhook signing is configured.
   let data, eventType;
 
+  // Check if webhook signing is configured.
   if (process.env.STRIPE_WEBHOOK_SECRET) {
     // Retrieve the event by verifying the signature using the raw body and secret.
     let event, data, eventType;

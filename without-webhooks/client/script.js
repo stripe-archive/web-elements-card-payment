@@ -6,6 +6,9 @@ var orderData = {
   currency: "usd"
 };
 
+// Disable the button until we have Stripe set up on the page
+document.querySelector("button").disabled = true;
+
 fetch("/stripe-key")
   .then(function(result) {
     return result.json();
@@ -14,6 +17,8 @@ fetch("/stripe-key")
     return setupElements(data);
   })
   .then(function({ stripe, card, clientSecret }) {
+    document.querySelector("button").disabled = false;
+
     document.querySelector("#submit").addEventListener("click", function(evt) {
       evt.preventDefault();
       pay(stripe, card, clientSecret);
