@@ -19,8 +19,9 @@ fetch("/stripe-key")
   .then(function({ stripe, card, clientSecret }) {
     document.querySelector("button").disabled = false;
 
-    document.querySelector("#submit").addEventListener("click", function(evt) {
-      evt.preventDefault();
+    var form = document.getElementById("payment-form");
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
       pay(stripe, card, clientSecret);
     });
   });

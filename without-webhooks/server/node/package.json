@@ -1,13 +1,13 @@
 {
-  "name": "stripe-placing-a-hold-manual-confirmation",
+  "name": "stripe-sample-web-elements-card-payment",
   "version": "1.0.0",
-  "description": "How to place a hold on a card",
+  "description": "How to take a card payment on the web",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "@adreyfus-stripe",
+  "author": "stripe-samples",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",

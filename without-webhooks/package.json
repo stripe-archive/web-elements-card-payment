@@ -1,7 +1,7 @@
 {
   "name": "stripe-sample-web-card-payment",
   "version": "1.0.0",
-  "description": "Placing a hold",
+  "description": "Taking a card payment on the web",
   "main": "server.js",
   "scripts": {
     "start": "node server/node/server.js",
