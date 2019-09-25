@@ -25,8 +25,10 @@ fetch("/create-payment-intent", {
   .then(function({ stripe, card, clientSecret }) {
     document.querySelector("button").disabled = false;
 
-    document.querySelector("#submit").addEventListener("click", function(evt) {
-      evt.preventDefault();
+    // Handle form submission.
+    var form = document.getElementById("payment-form");
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
       // Initiate payment when the submit button is clicked
       pay(stripe, card, clientSecret);
     });
