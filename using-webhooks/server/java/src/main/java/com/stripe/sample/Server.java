@@ -43,12 +43,10 @@ public class Server {
     static class CreatePaymentResponse {
         private String publicKey;
         private String clientSecret;
-        private String id;
 
-        public CreatePaymentResponse(String publicKey, String clientSecret, String id) {
+        public CreatePaymentResponse(String publicKey, String clientSecret) {
             this.publicKey = publicKey;
             this.clientSecret = clientSecret;
-            this.id = id;
         }
     }
 
