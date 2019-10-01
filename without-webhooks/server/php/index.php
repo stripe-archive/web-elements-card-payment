@@ -83,7 +83,7 @@ $app->post('/pay', function(Request $request, Response $response) use ($app)  {
   $body = json_decode($request->getBody());
 
   if($body->paymentIntentId == null) {
-    // Create new PaymentIntent with a payment method ID from the client.
+    // Create new PaymentIntent with a PaymentMethod ID from the client.
     $intent = \Stripe\PaymentIntent::create([
       "amount" => calculateOrderAmount($body->items),
       "currency" => $body->currency,

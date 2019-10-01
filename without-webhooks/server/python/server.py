@@ -48,7 +48,7 @@ def pay():
         if "paymentIntentId" not in data:
             order_amount = calculate_order_amount(data['items'])
 
-            # Create new PaymentIntent with a payment method ID from the client.
+            # Create new PaymentIntent with a PaymentMethod ID from the client.
             intent = stripe.PaymentIntent.create(
                 amount=order_amount,
                 currency=data['currency'],

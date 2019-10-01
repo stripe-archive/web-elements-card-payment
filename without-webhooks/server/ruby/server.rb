@@ -38,7 +38,7 @@ post '/pay' do
 
   begin
     if !data['paymentIntentId']
-      # Create a PaymentIntent with a payment method ID from the client.
+      # Create a PaymentIntent with a PaymentMethod ID from the client.
       intent = Stripe::PaymentIntent.create(
         amount: order_amount,
         currency: data['currency'],

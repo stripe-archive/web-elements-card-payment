@@ -140,7 +140,7 @@ public class Server {
             try {
                 if (postBody.getPaymentIntentId() == null) {
                     int orderAmount = calculateOrderAmount(postBody.getItems());
-                    // Create new PaymentIntent with a payment method ID from the client.
+                    // Create new PaymentIntent with a PaymentMethod ID from the client.
                     PaymentIntentCreateParams createParams = new PaymentIntentCreateParams.Builder()
                             .setCurrency(postBody.getCurrency()).setAmount(new Long(orderAmount))
                             .setPaymentMethod(postBody.getPaymentMethodId())

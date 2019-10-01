@@ -45,7 +45,7 @@ app.post("/pay", async (req, res) => {
   try {
     let intent;
     if (!paymentIntentId) {
-      // Create new PaymentIntent with a payment method ID from the client.
+      // Create new PaymentIntent with a PaymentMethod ID from the client.
       intent = await stripe.paymentIntents.create({
         amount: orderAmount,
         currency: currency,
