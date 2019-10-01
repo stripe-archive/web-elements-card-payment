@@ -48,7 +48,7 @@ def pay():
         if "paymentIntentId" not in data:
             order_amount = calculate_order_amount(data['items'])
 
-            # Create a new PaymentIntent for the order
+            # Create new PaymentIntent with a payment method ID from the client.
             intent = stripe.PaymentIntent.create(
                 amount=order_amount,
                 currency=data['currency'],
@@ -56,9 +56,12 @@ def pay():
                 confirmation_method='manual',
                 confirm=True
             )
+            # After create, if the PaymentIntent's status is succeeded, fulfill the order.
         else:
-            # Confirm the PaymentIntent to collect the money
+            # Confirm the PaymentIntent to finalize payment after handling a required action
+            # on the client.
             intent = stripe.PaymentIntent.confirm(data['paymentIntentId'])
+            # After confirm, if the PaymentIntent's status is succeeded, fulfill the order.
 
         return generate_response(intent)
     except Exception as e:

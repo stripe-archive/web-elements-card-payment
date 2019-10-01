@@ -38,7 +38,7 @@ post '/pay' do
 
   begin
     if !data['paymentIntentId']
-      # Create a new PaymentIntent for the order
+      # Create a PaymentIntent with a payment method ID from the client.
       intent = Stripe::PaymentIntent.create(
         amount: order_amount,
         currency: data['currency'],
@@ -46,9 +46,12 @@ post '/pay' do
         confirmation_method: 'manual',
         confirm: true
       )
+      # After create, if the PaymentIntent's status is succeeded, fulfill the order.
     else
-      # Confirm the PaymentIntent to collect the money
+      # Confirm the PaymentIntent to finalize payment after handling a required action
+      # on the client.
       intent = Stripe::PaymentIntent.confirm(data['paymentIntentId'])
+      # After confirm, if the PaymentIntent's status is succeeded, fulfill the order.
     end
 
     generate_response(intent)
