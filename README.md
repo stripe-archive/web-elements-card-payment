@@ -42,13 +42,13 @@ This sample includes 5 server implementations in Node, Ruby, Python, Java, and P
 
 Follow the steps below to run locally.
 
-1. Clone the repository:
+**1. Clone the repository:**
 
 ```
 git clone https://github.com/stripe-samples/web-elements-card-payment
 ```
 
-2. Copy the .env.example to a .env file:
+**2. Copy the .env.example to a .env file:**
 
 ```
 cp .env.example .env
@@ -63,7 +63,7 @@ STRIPE_SECRET_KEY=<replace-with-your-secret-key>
 
 `CLIENT_DIR` tells the server where to the client files are located and does not need to be modified unless you move the server files.
 
-3. Follow the server instructions on how to run:
+**3. Follow the server instructions on how to run:**
 
 Pick the server language you want and follow the instructions in the server folder README on how to run.
 
@@ -75,7 +75,7 @@ npm install
 npm start
 ```
 
-4. [Optional] Run a webhook locally:
+**4. [Optional] Run a webhook locally:**
 
 If you want to test the `using-webhooks` integration with a local webhook on your machine, you can use the Stripe CLI to easily spin one up.
 
