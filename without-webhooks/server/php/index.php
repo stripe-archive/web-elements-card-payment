@@ -83,7 +83,7 @@ $app->post('/pay', function(Request $request, Response $response) use ($app)  {
   $body = json_decode($request->getBody());
 
   if($body->paymentIntentId == null) {
-    // Create new PaymentIntent
+    // Create new PaymentIntent with a PaymentMethod ID from the client.
     $intent = \Stripe\PaymentIntent::create([
       "amount" => calculateOrderAmount($body->items),
       "currency" => $body->currency,
@@ -91,10 +91,13 @@ $app->post('/pay', function(Request $request, Response $response) use ($app)  {
       "confirmation_method" => "manual",
       "confirm" => true
     ]);
+    // After create, if the PaymentIntent's status is succeeded, fulfill the order.
   } else {
-    // Confirm the PaymentIntent to collect the money
+    // Confirm the PaymentIntent to finalize payment after handling a required action
+    // on the client.
     $intent = \Stripe\PaymentIntent::retrieve($body->paymentIntentId);
     $intent->confirm();
+    // After confirm, if the PaymentIntent's status is succeeded, fulfill the order.
   }
 
   $responseBody = generateResponse($intent, $logger);
