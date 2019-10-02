@@ -23,7 +23,7 @@ app = Flask(__name__, static_folder=static_dir,
             static_url_path="", template_folder=static_dir)
 
 
-@app.route('/', methods=['GET'])
+@app.route('/checkout', methods=['GET'])
 def get_checkout_page():
     # Display checkout page
     return render_template('index.html')

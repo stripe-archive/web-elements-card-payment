@@ -20,7 +20,7 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
+app.get("/checkout", (req, res) => {
   // Display checkout page
   const path = resolve(process.env.STATIC_DIR + "/index.html");
   res.sendFile(path);

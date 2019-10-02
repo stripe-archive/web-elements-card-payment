@@ -33,7 +33,7 @@ $app->add(function ($request, $response, $next) {
     return $next($request, $response);
 });
 
-$app->get('/', function (Request $request, Response $response, array $args) {   
+$app->get('/checkout', function (Request $request, Response $response, array $args) {   
   // Display checkout page
   return $response->write(file_get_contents(getenv('STATIC_DIR') . '/index.html'));
 });
